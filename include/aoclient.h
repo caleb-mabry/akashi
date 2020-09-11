@@ -21,6 +21,7 @@
 #include "include/aopacket.h"
 #include "include/server.h"
 #include "include/icchatpacket.h"
+#include "include/logger.h"
 
 #include <QHostAddress>
 #include <QTcpSocket>
@@ -45,6 +46,9 @@ class AOClient : public QObject {
     int current_area;
     QString current_char;
 
+signals:
+    void packetRecieved();
+
   public slots:
     void clientDisconnected();
     void clientData();
@@ -68,6 +72,7 @@ class AOClient : public QObject {
     void changeArea(int new_area);
     void arup(ARUPType type, bool broadcast);
     void fullArup();
+    Logger* logger;
 
     QString partial_packet;
     bool is_partial;

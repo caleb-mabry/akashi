@@ -21,6 +21,8 @@ MOC_DIR = $$PWD/build
 
 RC_ICONS = resource/icon/akashi.ico
 
-SOURCES += $$files($$PWD/src/*.cpp)
+SOURCES += $$files($$PWD/src/*.cpp) \
+    src/logger.cpp
 
-HEADERS += $$files($$PWD/include/*.h)
+HEADERS += $$files($$PWD/include/*.h) \
+    include/logger.h

@@ -16,6 +16,7 @@
 //    along with this program.  If not, see <https://www.gnu.org/licenses/>.        //
 //////////////////////////////////////////////////////////////////////////////////////
 #include "include/aoclient.h"
+#include "include/logger.h"
 
 AOClient::AOClient(Server* p_server, QTcpSocket* p_socket, QObject* parent)
     : QObject(parent)
@@ -30,6 +31,7 @@ AOClient::AOClient(Server* p_server, QTcpSocket* p_socket, QObject* parent)
     is_partial = false;
     last_wtce_time = 0;
     last_message = "";
+    logger = new Logger();
 }
 
 void AOClient::clientData()
@@ -71,8 +73,9 @@ void AOClient::clientDisconnected()
 void AOClient::handlePacket(AOPacket packet)
 {
     // TODO: like everything here should send a signal
-    //qDebug() << "Received packet:" << packet.header << ":" << packet.contents;
+    qDebug() << "Received packet:" << packet.header << ":" << packet.contents;
     AreaData* area = server->areas[current_area];
+    logger->write(packet.header);
     // Lord forgive me
     if (packet.header == "HI") {
         setHwid(packet.contents[0]);
