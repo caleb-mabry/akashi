@@ -31,7 +31,7 @@ AOClient::AOClient(Server* p_server, QTcpSocket* p_socket, QObject* parent)
     is_partial = false;
     last_wtce_time = 0;
     last_message = "";
-    logger = new Logger();
+    logger = new Logger(parent);
 }
 
 void AOClient::clientData()
@@ -76,12 +76,14 @@ void AOClient::handlePacket(AOPacket packet)
     qDebug() << "Received packet:" << packet.header << ":" << packet.contents;
     AreaData* area = server->areas[current_area];
     logger->write(packet.header);
+
     // Lord forgive me
     if (packet.header == "HI") {
         setHwid(packet.contents[0]);
         sendPacket("ID", {"271828", "akashi", QCoreApplication::applicationVersion()});
     }
     else if (packet.header == "ID") {
+
         QSettings config("config/config.ini", QSettings::IniFormat);
         config.beginGroup("Options");
         QString max_players = config.value("max_players").toString();
@@ -315,5 +317,6 @@ void AOClient::setHwid(QString p_hwid)
 QString AOClient::getIpid() { return ipid; }
 
 AOClient::~AOClient() {
+    logger->deleteLater();
     socket->deleteLater();
 }

@@ -3,18 +3,20 @@
 
 #include <QObject>
 #include <QFile>
-#include <QTextStream>
-#include <QDateTime>
+#include <QTime>
 
-class Logger
-{
+class Logger : public QObject {
+    Q_OBJECT
+
 public:
-    Logger();
+    Logger(QObject* parent = nullptr);
+    ~Logger();
     void write(QString text);
+
 private:
-    QString timeStamp();
-    QString loggingFileName;
-    QTextStream stream;
+    QByteArray timeStamp();
+    QTime time;
+    QFile logFile;
 };
 
 #endif // LOGGER_H

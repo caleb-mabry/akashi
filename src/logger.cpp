@@ -1,25 +1,20 @@
 #include "include/logger.h"
 
-#include <QFile>
-#include <QTextStream>
-#include <QDateTime>
-
-Logger::Logger() {
-
+Logger::Logger(QObject* parent) : QObject(parent) {
+    logFile.setFileName("log.txt");
+    logFile.open(QIODevice::WriteOnly | QIODevice::Append);
 }
 
-
-QString Logger::timeStamp() {
-    QTime time;
-    return "[" +time.currentTime().toString()+ "]";
+QByteArray  Logger::timeStamp() {
+    return ("[" +time.currentTime().toString()+ "]").toLocal8Bit();
 }
 
 void Logger::write(QString arg)
 {
-    QFile file("log.txt");
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
-            return;
+    logFile.write(timeStamp() + " " + arg.toLocal8Bit() + "\n");
+    logFile.flush();
+}
 
-    QTextStream out(&file);
-    out << this->timeStamp() << " " << arg << "\n";
+Logger::~Logger() {
+    logFile.close();
 }
