@@ -23,6 +23,8 @@
 #include "include/icchatpacket.h"
 #include "include/logger.h"
 
+#include <algorithm>
+
 #include <QHostAddress>
 #include <QTcpSocket>
 #include <QDateTime>
